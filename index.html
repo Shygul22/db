@@ -1,33 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Client Management System</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Management</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Optional CSS file for styling -->
+    <script defer src="script.js"></script> <!-- Link to external JavaScript file -->
 </head>
 <body>
-  <div class="container">
     <h1>Client Management System</h1>
-    <table id="clientsTable">
-      <thead>
-        <tr>
-          <th>Client ID</th>
-          <th>Client Name</th>
-          <th>Email</th>
-          <th>Phone Number</th>
-          <th>Company</th>
-          <th>Industry</th>
-          <th>Date of First Contact</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Data will be inserted here dynamically -->
-      </tbody>
-    </table>
-  </div>
+    
+    <input type="text" id="searchInput" placeholder="Search clients..." onkeyup="searchTable()">
+    <button onclick="openModal()">Add Client</button>
 
-  <script src="app.js"></script>
+    <table id="clientsTable">
+        <thead>
+            <tr>
+                <th>Client ID</th>
+                <th>Client Name</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Company</th>
+                <th>Industry</th>
+                <th>First Contact</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Client rows will be dynamically populated here -->
+        </tbody>
+    </table>
+
+    <!-- Modal for adding/editing client -->
+    <div id="clientModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle">Add Client</h2>
+            <form id="clientForm" onsubmit="saveClient(event)">
+                <input type="hidden" id="clientID">
+                <label for="clientName">Client Name:</label>
+                <input type="text" id="clientName" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" required>
+
+                <label for="phoneNumber">Phone Number:</label>
+                <input type="text" id="phoneNumber" required>
+
+                <label for="company">Company:</label>
+                <input type="text" id="company" required>
+
+                <label for="industry">Industry:</label>
+                <input type="text" id="industry" required>
+
+                <label for="firstContact">First Contact:</label>
+                <input type="date" id="firstContact" required>
+
+                <label for="status">Status:</label>
+                <select id="status">
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                </select>
+
+                <button type="submit">Save Client</button>
+            </form>
+        </div>
+    </div>
 </body>
 </html>
