@@ -32,7 +32,9 @@ try {
         username VARCHAR(50) UNIQUE NOT NULL,
         password VARCHAR(255) NOT NULL,
         email VARCHAR(100) UNIQUE NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        reset_token VARCHAR(64) DEFAULT NULL,
+        reset_token_expiry DATETIME DEFAULT NULL
     )";
     
     if (!mysqli_query($conn, $sql)) {
