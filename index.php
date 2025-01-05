@@ -12,7 +12,7 @@ if ($isLoggedIn) {
     exit();
 } else {
     // If not logged in, show the landing page
-    require_once 'includes/landing_page.php';
+    require_once 'https://zenjourney.in/';
 }
 
 require_once 'includes/footer.php';

@@ -30,6 +30,10 @@ require_once 'includes/header.php';
                 <span class="text-gray-800"><?php echo htmlspecialchars($user['email']); ?></span>
             </div>
             <div class="flex border-b py-2">
+                <span class="font-bold w-32 text-gray-600">Mobile:</span>
+                <span class="text-gray-800"><?php echo htmlspecialchars($user['mobile']); ?></span>
+            </div>
+            <div class="flex border-b py-2">
                 <span class="font-bold w-32 text-gray-600">Member Since:</span>
                 <span class="text-gray-800"><?php echo date('F j, Y', strtotime($user['created_at'])); ?></span>
             </div>
@@ -37,3 +41,4 @@ require_once 'includes/header.php';
     </div>
 </body>
 </html>
+

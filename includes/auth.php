@@ -17,7 +17,7 @@ function checkAuth() {
     }
     
     if (!isset($_SESSION['user_id'])) {
-        header("Location: /php files working area/login.php");
+        header("Location: /zenjourney files/login.php");
         exit();
     }
 
@@ -48,7 +48,7 @@ function logout() {
     }
     
     session_destroy();
-    header("Location: /php files working area/login.php");
+    header("Location: /zenjourney files/login.php");
     exit();
 }
 

@@ -64,28 +64,28 @@ function resetLoginAttempts($ip) {
 $pageTitle = 'Login';
 require_once 'includes/header.php';
 ?>
-    <div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
-        <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Login</h2>
-        <?php if(isset($error)) echo "<p class='text-red-500 text-center mb-4'>$error</p>"; ?>
+    <div class="max-w-md mx-auto bg-white rounded-xl shadow-[0_20px_50px_rgba(8,_112,_184,_0.7)] p-8 mt-10">
+        <h2 class="text-3xl font-bold mb-8 text-center text-gray-800 tracking-wide">Login</h2>
+        <?php if(isset($error)) echo "<p class='text-red-500 text-center mb-6 bg-red-50 py-2 rounded'>$error</p>"; ?>
         <form method="POST">
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2">Username:</label>
+            <div class="mb-6">
+                <label class="block text-gray-700 text-sm font-semibold mb-2">Username:</label>
                 <input type="text" name="username" required 
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200">
             </div>
-            <div class="mb-6"></div>
-                <label class="block text-gray-700 text-sm font-bold mb-2">Password:</label>
+            <div class="mb-8">
+                <label class="block text-gray-700 text-sm font-semibold mb-2">Password:</label>
                 <input type="password" name="password" required 
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200">
             </div>
             <button type="submit" 
-                class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                class="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 transform transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-lg">
                 Login
             </button>
         </form>
-        <p class="text-center mt-4 text-sm">
+        <p class="text-center mt-6 text-gray-600">
             Don't have an account? 
-            <a href="register.php" class="text-blue-500 hover:text-blue-700">Register here</a>
+            <a href="register.php" class="text-blue-500 hover:text-blue-700 font-semibold transition-colors duration-200">Register here</a>
         </p>
     </div>
 </body>

@@ -6,26 +6,29 @@ $pageTitle = 'Register';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = mysqli_real_escape_string($conn, $_POST['username']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
-    
+    $mobile = mysqli_real_escape_string($conn, $_POST['mobile']);
+
     // Validate email format
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error = "Invalid email format";
+    } elseif (!preg_match('/^[0-9]{10}$/', $mobile)) {
+        $error = "Invalid mobile number. Please enter a 10-digit number.";
     } else {
-        // Check if username or email already exists
-        $check_sql = "SELECT * FROM users WHERE username = ? OR email = ?";
+        // Check if username, email, or mobile already exists
+        $check_sql = "SELECT * FROM users WHERE username = ? OR email = ? OR mobile = ?";
         $check_stmt = mysqli_prepare($conn, $check_sql);
-        mysqli_stmt_bind_param($check_stmt, "ss", $username, $email);
+        mysqli_stmt_bind_param($check_stmt, "sss", $username, $email, $mobile);
         mysqli_stmt_execute($check_stmt);
         $result = mysqli_stmt_get_result($check_stmt);
-        
+
         if (mysqli_num_rows($result) > 0) {
-            $error = "Username or email already exists";
+            $error = "Username, email, or mobile number already exists";
         } else {
             $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-            $sql = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
+            $sql = "INSERT INTO users (username, email, mobile, password) VALUES (?, ?, ?, ?)";
             $stmt = mysqli_prepare($conn, $sql);
-            mysqli_stmt_bind_param($stmt, "sss", $username, $email, $password);
-            
+            mysqli_stmt_bind_param($stmt, "ssss", $username, $email, $mobile, $password);
+
             if (mysqli_stmt_execute($stmt)) {
                 header("Location: login.php");
                 exit();
@@ -54,6 +57,12 @@ require_once 'includes/header.php';
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>">
             </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Mobile Number:</label>
+                <input type="tel" name="mobile" required 
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    value="<?php echo isset($_POST['mobile']) ? htmlspecialchars($_POST['mobile']) : ''; ?>">
+            </div>
             <div class="mb-6">
                 <label class="block text-gray-700 text-sm font-bold mb-2">Password:</label>
                 <input type="password" name="password" required minlength="6"
@@ -70,4 +79,4 @@ require_once 'includes/header.php';
         </p>
     </div>
 </body>
-</html>
+</html> 
