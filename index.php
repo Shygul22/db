@@ -99,73 +99,53 @@
             <!-- Task List -->
             <div id="task-list" class="bg-white p-6 rounded-lg shadow-lg">
                 <!-- Priority Analysis Summary -->
-                <div id="priority-analysis" class="mb-6 border-b pb-4">
-                    <h3 class="text-xl font-semibold mb-4">Priority Analysis</h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
-                        <div class="bg-red-100 p-4 rounded-lg">
-                            <h4 class="font-semibold text-red-600">Critical Priority</h4>
-                            <div id="critical-tasks" class="mt-2"></div>
+                <div id="priority-analysis" class="mb-6">
+                    <h3 class="text-lg font-semibold mb-3">Priority Analysis</h3>
+    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                        <!-- Critical Priority -->
+                        <div class="border-l-4 border-red-500 bg-red-50 rounded-r-lg p-3">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="text-sm font-medium text-red-700">Critical Priority</h4>
+                                <span id="critical-count" class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full"></span>
+                            </div>
+                            <div id="critical-tasks" class="text-sm space-y-2"></div>
                         </div>
-                        <div class="bg-orange-100 p-4 rounded-lg">
-                            <h4 class="font-semibold text-orange-600">High Priority</h4>
-                            <div id="high-tasks" class="mt-2"></div>
+
+                        <!-- High Priority -->
+                        <div class="border-l-4 border-orange-500 bg-orange-50 rounded-r-lg p-3">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="text-sm font-medium text-orange-700">High Priority</h4>
+                                <span id="high-count" class="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded-full"></span>
+                            </div>
+                            <div id="high-tasks" class="text-sm space-y-2"></div>
                         </div>
-                        <div class="bg-yellow-100 p-4 rounded-lg">
-                            <h4 class="font-semibold text-yellow-600">Medium Priority</h4>
-                            <div id="medium-tasks" class="mt-2"></div>
+
+                        <!-- Medium Priority -->
+                        <div class="border-l-4 border-yellow-500 bg-yellow-50 rounded-r-lg p-3">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="text-sm font-medium text-yellow-700">Medium Priority</h4>
+                                <span id="medium-count" class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full"></span>
+                            </div>
+                            <div id="medium-tasks" class="text-sm space-y-2"></div>
                         </div>
-                        <div class="bg-green-100 p-4 rounded-lg">
-                            <h4 class="font-semibold text-green-600">Low Priority</h4>
-                            <div id="low-tasks" class="mt-2"></div>
+
+                        <!-- Low Priority -->
+                        <div class="border-l-4 border-green-500 bg-green-50 rounded-r-lg p-3">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="text-sm font-medium text-green-700">Low Priority</h4>
+                                <span id="low-count" class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full"></span>
+                            </div>
+                            <div id="low-tasks" class="text-sm space-y-2"></div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Search and filters remain the same -->
-                <div class="flex flex-col sm:flex-row gap-4 mb-4">
-                    <input type="text" id="task-search" placeholder="Search tasks..." onkeyup="filterTasks()"
-                        class="w-full sm:w-1/3 p-2 border rounded-lg">
+                <!-- Remove search and filters section and replace with just the task list -->
+                <div id="task-list-content" class="mt-4">
+                    <!-- Task list content will be populated by JavaScript -->
                 </div>
-                <div class="flex flex-wrap gap-2 mb-4">
-                    <select id="filter-category" onchange="filterTasks()" class="w-full sm:w-auto p-2 border rounded-lg">
-                        <option value="">All Categories</option>
-                        <option value="work">Work</option>
-                        <option value="personal">Personal</option>
-                        <option value="study">Study</option>
-                        <option value="health">Health</option>
-                        <option value="other">Other</option>
-                    </select>
 
-                    <select id="filter-status" onchange="filterTasks()" class="w-full sm:w-auto p-2 border rounded-lg">
-                        <option value="">All Status</option>
-                        <option value="pending">Pending</option>
-                        <option value="completed">Completed</option>
-                    </select>
-
-                    <select id="sort-tasks" onchange="sortAndUpdateTasks()" class="w-full sm:w-auto p-2 border rounded-lg">
-                        <option value="priority">Sort by Priority</option>
-                        <option value="dueDate">Sort by Due Date</option>
-                        <option value="progress">Sort by Progress</option>
-                        <option value="effort">Sort by Effort</option>
-                    </select>
-                </div>
-                <div id="task-list-content" class="mt-4 list-view">
-                    <div class="text-center py-12 px-4">
-                        <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 48 48">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
-                        </svg>
-                        <h3 class="mt-4 text-lg font-medium text-gray-900">No tasks yet</h3>
-                        <p class="mt-2 text-sm text-gray-500">Get started by adding your first task using the form on the left.</p>
-                        <div class="mt-6">
-                            <button onclick="document.getElementById('task-name').focus()" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-                                </svg>
-                                Add Your First Task
-                            </button>
-                        </div>
-                    </div>
-                </div>
                 <button onclick="clearAllTasks()" class="w-full sm:w-auto bg-red-600 text-white py-3 px-4 rounded-lg shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-600 transition duration-300 mt-6 text-lg">
                     <i class="fa fa-trash mr-2"></i> Clear All Tasks
                 </button>
@@ -290,16 +270,8 @@ function calculatePriorityScore(task) {
         (effortWeight * normalizedEffort)
     ) * 2;
 
-    // Add time-based urgency boost if due date exists
-    let finalScore = baseScore;
-    if (task.dueDate) {
-        const daysUntilDue = getDaysUntilDue(task.dueDate);
-        if (daysUntilDue <= 1) finalScore *= 1.5;  // 50% boost for tasks due within 24 hours
-        else if (daysUntilDue <= 3) finalScore *= 1.2;  // 20% boost for tasks due within 3 days
-    }
-    
-    // Normalize final score to 0-10 range and round to 2 decimal places
-    return Math.min(10, Math.max(0, finalScore)).toFixed(2);
+    // Return score rounded to 2 decimal places
+    return Math.min(10, Math.max(0, baseScore)).toFixed(2);
 }
 
 // Add helper function for date calculations
@@ -323,61 +295,96 @@ function getPriorityClass(score) {
 // Update the task element creation in updateTaskList function
 function updateTaskList(filteredTasks = tasks) {
     try {
-        updatePriorityAnalysis(); // Add this line at the start
+        updatePriorityAnalysis();
         const taskListContent = document.getElementById('task-list-content');
         taskListContent.innerHTML = '';
 
+        // Add table header
+        taskListContent.innerHTML = `
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Task Name</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Priority Score</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Metrics</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Scheduled Time</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                    </tbody>
+                </table>
+            </div>
+        `;
+
+        const tbody = taskListContent.querySelector('tbody');
+
         filteredTasks.forEach(task => {
-            const taskElement = document.createElement('div');
-            taskElement.className = `p-4 bg-gray-100 rounded-lg shadow-md mb-4 ${
-                task.completedTime ? 'opacity-50' : ''
-            }`;
-            
             const priorityScore = calculatePriorityScore(task);
             const priorityClass = getPriorityClass(priorityScore);
             const priorityLabel = getPriorityLabel(priorityScore);
 
-            taskElement.innerHTML = `
-                <div class="flex justify-between items-start">
-                    <div class="flex-1">
-                        <h3 class="text-xl font-semibold">${task.name}</h3>
-                        <div class="${priorityClass} flex items-center gap-2">
-                            <span>Priority: ${priorityLabel}</span>
-                            <span>(Score: ${priorityScore})</span>
+            const tr = document.createElement('tr');
+            tr.className = `${task.completedTime ? 'bg-gray-50' : 'hover:bg-gray-50'} transition-colors`;
+            
+            tr.innerHTML = `
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                        <div class="text-sm font-medium text-gray-900 ${task.completedTime ? 'line-through' : ''}">
+                            ${task.name}
                         </div>
-                        <p class="text-gray-700">Urgency: ${task.urgency}/5 | Importance: ${task.importance}/5 | Effort: ${task.effort}h</p>
-                        <p>Scheduled Time: ${task.scheduledTime || 'Not scheduled'}</p>
-                        <p>Due Date: ${task.dueDate ? new Date(task.dueDate).toLocaleDateString() : 'No due date'}</p>
-                        <p class="text-gray-600">${task.description || 'No description'}</p>
                     </div>
-                    <div class="flex flex-col space-y-2 ml-4">
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                        <div class="${priorityClass} text-sm">
+                            ${priorityLabel} (${priorityScore})
+                        </div>
+                    </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="text-sm text-gray-700">
+                        U:${task.urgency}/5 | I:${task.importance}/5 | E:${task.effort}h
+                    </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="text-sm text-gray-500">
+                        ${task.scheduledTime || 'Not scheduled'}
+                    </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <div class="flex space-x-2">
                         ${!task.completedTime ? `
                             <button onclick="completeTask('${task.id}')"
-                                class="bg-green-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-600 transition duration-200 flex items-center">
-                                <i class="fa fa-check mr-2"></i>Complete
+                                class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 transition-colors">
+                                <i class="fa fa-check"></i>
                             </button>
                         ` : `
-                            <span class="text-green-600 font-medium">
-                                <i class="fa fa-check-circle mr-1"></i>Completed
+                            <span class="text-green-600">
+                                <i class="fa fa-check-circle"></i>
                             </span>
                         `}
                         <button onclick="deleteTask('${task.id}')"
-                            class="bg-red-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-600 transition duration-200 flex items-center">
-                            <i class="fa fa-trash mr-2"></i>Delete
+                            class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition-colors">
+                            <i class="fa fa-trash"></i>
                         </button>
                     </div>
-                </div>
+                </td>
             `;
-            taskListContent.appendChild(taskElement);
+            
+            tbody.appendChild(tr);
         });
 
         // Show empty state if no tasks
         if (filteredTasks.length === 0) {
-            taskListContent.innerHTML = `
-                <div class="text-center text-gray-500 py-8">
-                    <i class="fa fa-tasks fa-3x mb-4"></i>
-                    <p>No tasks found</p>
-                </div>
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="5" class="px-6 py-4 text-center text-gray-500">
+                        <i class="fa fa-tasks fa-2x mb-2"></i>
+                        <p>No tasks found</p>
+                    </td>
+                </tr>
             `;
         }
     } catch (error) {
@@ -871,53 +878,14 @@ function updateDashboard() {
     dashboard.init();
 }
 
-// Update filterTasks function
-function filterTasks() {
-    const searchTerm = document.getElementById('task-search').value.toLowerCase();
-    const categoryFilter = document.getElementById('filter-category').value;
-    const statusFilter = document.getElementById('filter-status').value;
-
-    const filtered = tasks.filter(task => {
-        const matchesSearch = task.name.toLowerCase().includes(searchTerm);
-        const matchesCategory = !categoryFilter || task.category === categoryFilter;
-        const matchesStatus = !statusFilter || 
-            (statusFilter === 'completed' && task.completedTime) ||
-            (statusFilter === 'pending' && !task.completedTime);
-
-        return matchesSearch && matchesCategory && matchesStatus;
-    });
-
-    updateTaskList(filtered);
-}
-
-function sortAndUpdateTasks() {
-    const sortBy = document.getElementById('sort-tasks').value;
-    const sortedTasks = [...tasks].sort((a, b) => {
-        switch (sortBy) {
-            case 'priority':
-                return calculatePriorityScore(b) - calculatePriorityScore(a);
-            case 'dueDate':
-                return (a.dueDate || '') > (b.dueDate || '') ? 1 : -1;
-            case 'effort':
-                return (b.effort || 0) - (a.effort || 0);
-            case 'progress':
-                return (b.completedTime ? 1 : 0) - (a.completedTime ? 1 : 0);
-            default:
-                return 0;
-        }
-    });
-
-    updateTaskList(sortedTasks);
-}
-
 // Add this new function to analyze and display priority distribution
 function updatePriorityAnalysis() {
     try {
         const priorityGroups = {
-            critical: { tasks: [], element: 'critical-tasks', threshold: 8 },
-            high: { tasks: [], element: 'high-tasks', threshold: 6 },
-            medium: { tasks: [], element: 'medium-tasks', threshold: 4 },
-            low: { tasks: [], element: 'low-tasks', threshold: 0 }
+            critical: { tasks: [], element: 'critical-tasks', countElement: 'critical-count', threshold: 8 },
+            high: { tasks: [], element: 'high-tasks', countElement: 'high-count', threshold: 6 },
+            medium: { tasks: [], element: 'medium-tasks', countElement: 'medium-count', threshold: 4 },
+            low: { tasks: [], element: 'low-tasks', countElement: 'low-count', threshold: 0 }
         };
 
         // Group tasks by priority
@@ -939,32 +907,39 @@ function updatePriorityAnalysis() {
         // Update the UI for each priority group
         Object.entries(priorityGroups).forEach(([level, group]) => {
             const element = document.getElementById(group.element);
-            if (!element) return;
+            const countElement = document.getElementById(group.countElement);
+            
+            if (!element || !countElement) return;
+
+            // Update count badge
+            countElement.textContent = group.tasks.length;
 
             if (group.tasks.length === 0) {
-                element.innerHTML = '<p class="text-gray-500">No tasks</p>';
+                element.innerHTML = '<div class="py-3 text-gray-500 text-sm">No tasks</div>';
                 return;
             }
 
-            element.innerHTML = `
-                <p class="font-medium">${group.tasks.length} task${group.tasks.length > 1 ? 's' : ''}</p>
-                <div class="mt-2 space-y-2">
-                    ${group.tasks
-                        .sort((a, b) => calculatePriorityScore(b) - calculatePriorityScore(a))
-                        .slice(0, 3)
-                        .map(task => `
-                            <div class="text-sm">
-                                <div class="font-medium truncate">${task.name}</div>
-                                <div class="text-xs opacity-75">Score: ${calculatePriorityScore(task)}</div>
+            element.innerHTML = group.tasks
+                .sort((a, b) => calculatePriorityScore(b) - calculatePriorityScore(a))
+                .slice(0, 2)
+                .map(task => `
+                    <div class="flex items-center justify-between py-1">
+                        <div class="flex-1 truncate">
+                            <div class="font-medium truncate">${task.name}</div>
+                            <div class="text-xs text-gray-500">
+                                Score: ${calculatePriorityScore(task)} | ${task.scheduledTime || 'Not scheduled'}
                             </div>
-                        `).join('')}
-                    ${group.tasks.length > 3 ? `
-                        <div class="text-xs text-gray-500">
-                            +${group.tasks.length - 3} more tasks
                         </div>
-                    ` : ''}
-                </div>
-            `;
+                    </div>
+                `).join('');
+
+            if (group.tasks.length > 2) {
+                element.innerHTML += `
+                    <div class="text-xs text-gray-500 text-right">
+                        +${group.tasks.length - 2} more
+                    </div>
+                `;
+            }
         });
     } catch (error) {
         ErrorHandler.handle(error, 'Failed to update priority analysis');
