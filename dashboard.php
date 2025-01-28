@@ -201,10 +201,20 @@
             }
         }
 
+        // Update the showLoading function to include null checks
         function showLoading(show) {
-            document.querySelectorAll('[id$="-loading"]').forEach(loader => {
-                loader.classList.toggle('hidden', !show);
-            });
+            try {
+                const loadingElements = document.querySelectorAll('[id$="-loading"]');
+                if (loadingElements) {
+                    loadingElements.forEach(loader => {
+                        if (loader) {
+                            loader.classList.toggle('hidden', !show);
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Loading state update failed:', error);
+            }
         }
 
         async function updateStats(tasks) {
