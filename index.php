@@ -24,28 +24,16 @@
                         <input type="text" id="task-name" placeholder="Enter task name" required
                             class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
-                    <!-- Urgency -->
-                    <div class="col-span-1">
-                        <label for="urgency" class="block text-sm font-medium text-gray-700 mb-1">Urgency</label>
-                        <select id="urgency" required class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="" disabled selected>Select</option>
-                            <option value="1">1 - Low</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5 - High</option>
-                        </select>
-                    </div>
-                    <!-- Importance -->
-                    <div class="col-span-1">
-                        <label for="importance" class="block text-sm font-medium text-gray-700 mb-1">Importance</label>
-                        <select id="importance" required class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="" disabled selected>Select</option>
-                            <option value="1">1 - Low</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5 - High</option>
+                    <!-- Replace Urgency and Importance with Priority -->
+                    <div class="col-span-2">
+                        <label for="priority" class="block text-sm font-medium text-gray-700 mb-1">Priority</label>
+                        <select id="priority" required class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="" disabled selected>Select Priority Level</option>
+                            <option value="1">1 - Very Low</option>
+                            <option value="2">2 - Low</option>
+                            <option value="3">3 - Medium</option>
+                            <option value="4">4 - High</option>
+                            <option value="5">5 - Very High</option>
                         </select>
                     </div>
                     <!-- Effort -->
@@ -82,7 +70,7 @@
                             class="w-full p-3 border border-gray-300 rounded-lg" onchange="saveTimeSlotSettings()">
                     </div>
                     <div class="flex items-end">
-                        <button onclick="allocateTimeSlots(tasks)" class="w-full bg-blue-500 text-white p-3 rounded-lg">
+                        <button onclick="rescheduleAllTasks()" class="w-full bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition duration-200">
                             Schedule Tasks
                         </button>
                     </div>
@@ -331,16 +319,19 @@ document.getElementById('task-form')?.addEventListener('submit', function(e) {
     e.preventDefault();
     try {
         const taskName = document.getElementById('task-name')?.value?.trim();
-        const urgency = Number(document.getElementById('urgency')?.value);
-        const importance = Number(document.getElementById('importance')?.value);
+        const priority = Number(document.getElementById('priority')?.value);
         const effort = Number(document.getElementById('effort')?.value);
         
         if (!taskName) throw new Error('Task name is required');
-        if (urgency < 1 || urgency > 5) throw new Error('Invalid urgency value');
-        if (importance < 1 || importance > 5) throw new Error('Invalid importance value');
+        if (priority < 1 || priority > 5) throw new Error('Invalid priority value');
         if (effort <= 0 || effort > 24) throw new Error('Effort must be between 0 and 24 hours');
 
-        const taskData = { name: taskName, urgency, importance, effort };
+        const taskData = { 
+            name: taskName, 
+            urgency: priority, // Use priority for both
+            importance: priority, 
+            effort 
+        };
         
         if (addTask(taskData)) {
             this.reset();
@@ -455,7 +446,7 @@ function updateTaskList() {
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                     <div class="text-sm text-gray-700">
-                        U:${task.urgency}/5 | I:${task.importance}/5 | E:${task.effort}h
+                        Priority: ${task.urgency}/5 | Effort: ${task.effort}h
                     </div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
@@ -506,22 +497,61 @@ function getPriorityLabel(score) {
     return 'Low';
 }
 
+function rescheduleTasksAfterTime(startingTime) {
+    // Filter uncompleted tasks that are scheduled after the given time
+    const remainingTasks = tasks.filter(t => 
+        !t.completedTime && 
+        t.startTime >= startingTime
+    );
+
+    // Get the end of day time
+    const endTime = TimeUtil.toDecimal(getElementValue('end-time', '17:00'));
+    const breakTime = parseInt(getElementValue('break-time', '0')) / 60;
+
+    let currentTime = startingTime;
+    
+    // Reschedule remaining tasks
+    remainingTasks.forEach(task => {
+        const taskEndTime = currentTime + task.effort;
+        if (taskEndTime <= endTime) {
+            task.startTime = currentTime;
+            task.endTime = taskEndTime;
+            task.scheduledTime = TimeUtil.formatTimeRange(currentTime, taskEndTime);
+            currentTime = taskEndTime + breakTime;
+        } else {
+            task.scheduledTime = "Exceeds available time";
+            task.startTime = null;
+            task.endTime = null;
+        }
+    });
+
+    // Update tasks array
+    tasks = tasks.map(t => {
+        const updatedTask = remainingTasks.find(rt => rt.id === t.id);
+        return updatedTask || t;
+    });
+
+    DataManager.save('tasks', tasks);
+    updateTaskList();
+}
+
 function completeTask(taskId) {
     try {
         const task = tasks.find(t => t.id === taskId);
-        if (task) {
+        if (task && !task.completedTime) {
+            // Store the end time of the completed task
+            const taskEndTime = task.endTime;
+            
+            // Mark task as completed
             task.completedTime = new Date().toISOString();
-            DataManager.save('tasks', tasks);
-            const result = TimeSlotManager.allocateTimeSlots(tasks, {
-                startTime: getElementValue('start-time', '09:00'),
-                endTime: getElementValue('end-time', '17:00'),
-                breakTime: parseInt(getElementValue('break-time', '0'))
-            });
-            if (result) {
-                tasks = [...result.scheduled, ...result.unscheduled];
+            
+            // Only reschedule tasks that come after this task
+            if (taskEndTime) {
+                rescheduleTasksAfterTime(taskEndTime);
+            } else {
                 DataManager.save('tasks', tasks);
+                updateTaskList();
             }
-            updateTaskList();
         }
     } catch (error) {
         ErrorHandler.handle(error, 'Failed to complete task');
@@ -552,6 +582,26 @@ function clearAllTasks() {
         tasks = [];
         DataManager.save('tasks', tasks);
         updateTaskList();
+    }
+}
+
+function rescheduleAllTasks() {
+    try {
+        const result = TimeSlotManager.allocateTimeSlots(tasks, {
+            startTime: getElementValue('start-time', '09:00'),
+            endTime: getElementValue('end-time', '17:00'),
+            breakTime: parseInt(getElementValue('break-time', '0'))
+        });
+        
+        if (result) {
+            tasks = [...result.scheduled, ...result.unscheduled];
+            DataManager.save('tasks', tasks);
+            updateTaskList();
+            // Show success message
+            ErrorHandler.showError('Tasks rescheduled successfully');
+        }
+    } catch (error) {
+        ErrorHandler.handle(error, 'Failed to reschedule tasks');
     }
 }
 
